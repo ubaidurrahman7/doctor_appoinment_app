@@ -51,14 +51,14 @@ const Navbar = () => {
 
 
               <li className="link">
-                <a href="../Sign_Up//Sign_Up.html">
+                <Link to="/sign_up">
                   <button className="btn1">Sign Up</button>
-                </a>
+                </Link>
               </li>
               <li className="link">
-                <a href="../Login/Login.html">
+                <Link to="/login">
                   <button className="btn1">Login</button>
-                </a>
+                </Link>
               </li>
 
         </ul>
