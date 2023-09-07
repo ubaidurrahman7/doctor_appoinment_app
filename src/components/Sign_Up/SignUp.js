@@ -1,6 +1,6 @@
 import React from 'react'
 import "./Sign_Up.css";
-
+import { Link } from 'react-router-dom';
 const SignUp = () => {
   return (
     <div className="container">

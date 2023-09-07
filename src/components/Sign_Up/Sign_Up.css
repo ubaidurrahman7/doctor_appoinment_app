@@ -6,7 +6,6 @@
     overflow: hidden;
     border: black 1px solid;
     max-width: 400px;
-    margin-top: 50px;
   }
   .password-visibility{
     position: relative;
@@ -25,7 +24,7 @@
   }
   
   .signup-text {
-    margin-top: 30px;
+    margin-top: 10px;
     grid-column: 1 / 4;
     text-align: center;
   }
@@ -38,9 +37,7 @@
     font-weight: 600;
     cursor: pointer;
   }
-  .signup-form {
-    
-  }
+  
   
   .signup {
     flex: 1;
@@ -50,7 +47,7 @@
   }
   
   .signup h1 {
-    margin-bottom: 20px;
+    margin-bottom: 10px;
     text-align: center;
     color: #3c79a7;
     letter-spacing:.1em;
