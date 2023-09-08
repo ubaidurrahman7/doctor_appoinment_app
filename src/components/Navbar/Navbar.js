@@ -2,6 +2,15 @@ import React from 'react'
 import { Link } from 'react-router-dom'
 import "./Navbar.css";
 const Navbar = () => {
+    const authToken = sessionStorage.getItem('auth-token');
+    const userEmail = sessionStorage.getItem('email');
+  const userName = userEmail ? userEmail.split('@')[0] : '';
+
+  const handleLogout = () => {
+    // Clear the auth token and any other user-related data from sessionStorage
+    sessionStorage.removeItem('auth-token');
+    // Add any other sessionStorage clearing logic you may have here
+  };
   return (
     <nav>
         <div className="nav__logo">
@@ -43,14 +52,20 @@ const Navbar = () => {
     <Link to="/appointments">Appointments</Link>
   </li>
   <li className="link">
-    <Link to="/health-blogs">Health Blogs</Link>
+    <Link to="/health-blogs"> <span>Health_Blogs</span></Link>
   </li>
   <li className="link">
     <Link to="/review">Review</Link>
   </li>
 
 
-              <li className="link">
+              
+              {authToken ? (<>
+                <span style={{display: 'inline-block'}}>Welcome,{userName}!</span>
+        <button className='btn2' onClick={handleLogout}>Logout</button>
+        </>) : (
+        <>
+          <li className="link">
                 <Link to="/sign_up">
                   <button className="btn1">Sign Up</button>
                 </Link>
@@ -60,6 +75,8 @@ const Navbar = () => {
                   <button className="btn1">Login</button>
                 </Link>
               </li>
+        </>
+      )}
 
         </ul>
       </nav>
