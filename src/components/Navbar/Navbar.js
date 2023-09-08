@@ -1,15 +1,18 @@
 import React from 'react'
-import { Link } from 'react-router-dom'
+import { Link, useNavigate } from 'react-router-dom'
 import "./Navbar.css";
 const Navbar = () => {
+    const navigate = useNavigate();
     const authToken = sessionStorage.getItem('auth-token');
     const userEmail = sessionStorage.getItem('email');
   const userName = userEmail ? userEmail.split('@')[0] : '';
 
   const handleLogout = () => {
-    // Clear the auth token and any other user-related data from sessionStorage
-    sessionStorage.removeItem('auth-token');
-    // Add any other sessionStorage clearing logic you may have here
+    for (let i = 0; i < sessionStorage.length; i++) {
+        const key = sessionStorage.key(i);
+        sessionStorage.removeItem(key);
+    }
+    navigate('/');
   };
   return (
     <nav>

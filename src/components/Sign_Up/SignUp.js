@@ -11,7 +11,7 @@ const SignUp = () => {
     const navigate = useNavigate();
     const register = async (e) => {
         e.preventDefault();
-        console.log('button clicked!');
+        
         // API Call
         const response = await fetch(`${API_URL}/api/auth/register`, {
             method: "POST",
@@ -81,8 +81,8 @@ const SignUp = () => {
                         <button type="submit" className="btn btn-primary mb-2 mr-1 waves-effect waves-light">Submit</button>
                         <button type="reset" className="btn btn-danger mb-2 waves-effect waves-light">Reset</button>
                     </div>
-                </form>
         {showerr && <div className="err" style={{ color: 'red' }}>{showerr}</div>}
+                </form>
             </div>
         </div>
     </div>

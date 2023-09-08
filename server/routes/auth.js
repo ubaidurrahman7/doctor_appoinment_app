@@ -51,9 +51,12 @@ router.post('/register',[
 
     try {
         const checkMultipleUser1 = await UserSchema.findOne({ email : req.body.email });
-        if(checkMultipleUser1){
-            return res.status(403).json({ error: "A User with this email address already exists" });
-        }
+console.log('User found:', checkMultipleUser1);
+
+if(checkMultipleUser1){
+    return res.status(403).json({ error: "A User with this email address already exists" });
+}
+        
 
         const salt = await bcrypt.genSalt(10);
         const hash = await bcrypt.hash(req.body.password, salt);
