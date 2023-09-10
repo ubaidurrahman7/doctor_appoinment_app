@@ -14,6 +14,22 @@
     grid-column: 1 / 4;
     text-align: center;
   }
+  .error-line {
+    height: 2px; /* Adjust the height as needed */
+    background-color: red;
+    position: relative;
+    width: 80%; /* Start with full width */
+    animation: fadeOut 10s linear;
+}
+
+@keyframes fadeOut {
+    0% {
+        width: 80%; /* Start with full width */
+    }
+    80% {
+        width: 0; /* End with no width (disappeared) */
+    } 
+}
 
   
   .form-group {
