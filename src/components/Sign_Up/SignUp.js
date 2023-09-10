@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import './Sign_Up.css'
 import { Link, useNavigate } from 'react-router-dom';
 import { API_URL } from '../../config';
@@ -7,8 +7,14 @@ const SignUp = () => {
     const [email, setEmail] = useState('');
     const [phone, setPhone] = useState('');
     const [password, setPassword] = useState('');
-    const [showerr, setShowerr] = useState('');
+    const [showerr, setShowerr] = useState({ messages: [], timer: null });
     const navigate = useNavigate();
+
+    const hideErrorMessages = () => {
+        setShowerr({ messages: [], timer: null });
+    };
+
+
     const register = async (e) => {
         e.preventDefault();
         
@@ -37,19 +43,33 @@ const SignUp = () => {
             navigate("/");   //on directing to home page you need to give logic to change login and signup buttons with name of the user and logout button where you have implemented Navbar functionality
             window.location.reload();
         } else {
-            if (json.errors) {
-                for (const error of json.errors) {
-                    setShowerr(error.msg);
-                }
+            // Registration failed, handle the error(s)
+            if (json.error && json.error.length > 0) {
+                const errorMessages = json.error.map((errorItem) => errorItem.msg);
+                console.error("Error Messages:", errorMessages); // Debugging line
+                // Update the showerr state with the array of error messages
+                setShowerr({
+                    messages: errorMessages,
+                    timer: setTimeout(hideErrorMessages, 10000) // 10 seconds
+                });
             } else {
-                setShowerr(json.error);
+                // Handle unexpected error response with no error messages
+                console.error("Registration failed with an unknown error.");
             }
         }
         
     };
+    useEffect(() => {
+        // Clear the timer when the component unmounts
+        return () => {
+            if (showerr.timer) {
+                clearTimeout(showerr.timer);
+            }
+        };
+    }, [showerr]);
 
   return (
-    <div className="container">
+      <div className="container">
         <div className="signup-grid">
             <div className="signup-text">
                 <h1>Sign Up</h1>
@@ -62,6 +82,21 @@ const SignUp = () => {
                 <form method="POST" onSubmit={register}>
 
                 <div className="form-group">
+                {showerr.messages.length > 0 && (
+    <div className="err" style={{ color: 'red' }}>
+    <ul>
+        {showerr.messages.map((errorMessage, index) => (
+        <div style={{ marginBottom:'15px' , marginLeft:'-25px', border:'2px solid red' }}>
+            <li key={index} style={{ marginLeft: '15px' }}>{errorMessage}</li>
+            <div
+            className="error-line"
+            style={{ animationDuration: '10s', marginBottom: '5px', marginLeft: '20px' }}
+        ></div></div>
+        
+        ))}
+    </ul>
+</div>
+)}
                             <label htmlFor="name">Name</label>
                             <input value={name} onChange={(e) => setName(e.target.value)} type="text" name="name" id="name" className="form-control" placeholder="Enter your name" aria-describedby="helpId" />
                         </div>
@@ -81,7 +116,6 @@ const SignUp = () => {
                         <button type="submit" className="btn btn-primary mb-2 mr-1 waves-effect waves-light">Submit</button>
                         <button type="reset" className="btn btn-danger mb-2 waves-effect waves-light">Reset</button>
                     </div>
-        {showerr && <div className="err" style={{ color: 'red' }}>{showerr}</div>}
                 </form>
             </div>
         </div>
