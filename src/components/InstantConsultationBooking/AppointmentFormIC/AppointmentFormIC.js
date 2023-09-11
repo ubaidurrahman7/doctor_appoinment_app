@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 
-const AppointmentFormIC = ({ doctorName, doctorSpeciality, onSubmit }) => {
+const AppointmentFormIC = ({ doctorId, doctorName, doctorSpeciality, onSubmit }) => {
     const [name, setName] = useState('');
     const [phoneNumber, setPhoneNumber] = useState('');
     const [selectedSlot, setSelectedSlot] = useState(null);
@@ -22,11 +22,11 @@ const AppointmentFormIC = ({ doctorName, doctorSpeciality, onSubmit }) => {
     };
 
     const handleFormSubmit = (e) => {
-        e.preventDefault();
-        onSubmit({ name, phoneNumber });
+        console.log(doctorId); 
+        onSubmit({ doctorId, doctorName, name, doctorSpeciality, phoneNumber, appointmentDataTime: selectedSlot });
         setName('');
         setPhoneNumber('');
-    };
+      }; 
 
     return (
         <form onSubmit={handleFormSubmit} className="appointment-form">

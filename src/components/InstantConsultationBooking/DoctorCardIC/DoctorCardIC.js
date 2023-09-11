@@ -1,22 +1,27 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import Popup from 'reactjs-popup';
 import 'reactjs-popup/dist/index.css';
 import './DoctorCardIC.css';
-import AppointmentFormIC from '../AppointmentFormIC/AppointmentFormIC'
+import AppointmentFormIC from '../AppointmentFormIC/AppointmentFormIC';
 import { v4 as uuidv4 } from 'uuid';
 
-
-const DoctorCardIC = ({ name, speciality, experience, ratings, profilePic }) => {
+const DoctorCardIC = ({ doctorId, name, speciality, experience, ratings, profilePic }) => {
   const [showModal, setShowModal] = useState(false);
   const [appointments, setAppointments] = useState([]);
+  const hasAppointmentsForDoctor = appointments.some(appointment => appointment.doctorId === doctorId);
 
-//   const handleBooking = () => {
-//     setShowModal(true);
-//   };
+  useEffect(() => {
+    // Retrieve appointments from local storage
+    const storedAppointments = JSON.parse(localStorage.getItem('appointments')) || [];
+    setAppointments(storedAppointments);
+    console.log(storedAppointments);
+  }, []); // Run this effect only once on component mount
 
   const handleCancel = (appointmentId) => {
     const updatedAppointments = appointments.filter((appointment) => appointment.id !== appointmentId);
     setAppointments(updatedAppointments);
+    // Update local storage when canceling an appointment
+    localStorage.setItem('appointments', JSON.stringify(updatedAppointments));
   };
 
   const handleFormSubmit = (appointmentData) => {
@@ -26,6 +31,7 @@ const DoctorCardIC = ({ name, speciality, experience, ratings, profilePic }) => 
     };
     const updatedAppointments = [...appointments, newAppointment];
     setAppointments(updatedAppointments);
+    // Update local storage when adding a new appointment
     localStorage.setItem('appointments', JSON.stringify(updatedAppointments));
     setShowModal(false);
   };
@@ -55,14 +61,14 @@ const DoctorCardIC = ({ name, speciality, experience, ratings, profilePic }) => 
        <Popup
           style={{ backgroundColor: '#FFFFFF' }}
           trigger={
-            <button className={`book-appointment-btn ${appointments.length > 0 ? 'cancel-appointment' : ''}`}>
-              {appointments.length > 0 ? (
-                <div>Cancel Appointment</div>
-              ) : (
-                <div>Book Appointment</div>
-              )}
-              <div>No Booking Fee</div>
-            </button>
+            <button className={`book-appointment-btn ${hasAppointmentsForDoctor ? 'cancel-appointment' : ''}`}>
+            {hasAppointmentsForDoctor ? (
+              <div>Cancel Appointment</div>
+            ) : (
+              <div>Book Appointment</div>
+            )}
+            <div>No Booking Fee</div>
+          </button>
           }
           modal
           open={showModal}
@@ -94,7 +100,13 @@ const DoctorCardIC = ({ name, speciality, experience, ratings, profilePic }) => 
                   ))}
                 </>
               ) : (
-                <AppointmentFormIC doctorName={name} doctorSpeciality={speciality} onSubmit={handleFormSubmit} />
+                <AppointmentFormIC
+        doctorId={doctorId} 
+        doctorName={name}
+        doctorSpeciality={speciality}
+        onSubmit={handleFormSubmit}
+        existingAppointments={appointments}
+      />
               )}
             </div>
           )}
