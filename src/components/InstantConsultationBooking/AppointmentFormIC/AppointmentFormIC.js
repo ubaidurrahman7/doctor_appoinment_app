@@ -18,7 +18,6 @@ const AppointmentFormIC = ({ doctorId, doctorName, doctorSpeciality, onSubmit })
 
     const handleSlotSelection = (slot) => {
         setSelectedSlot(slot);
-        console.log(selectedSlot);
     };
 
     const handleFormSubmit = (e) => {

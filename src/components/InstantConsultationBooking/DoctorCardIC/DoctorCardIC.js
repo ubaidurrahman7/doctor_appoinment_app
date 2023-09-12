@@ -9,12 +9,10 @@ const DoctorCardIC = ({ doctorId, name, speciality, experience, ratings, profile
   const [showModal, setShowModal] = useState(false);
   const [appointments, setAppointments] = useState([]);
   const hasAppointmentsForDoctor = appointments.some(appointment => appointment.doctorId === doctorId);
-
   useEffect(() => {
     // Retrieve appointments from local storage
     const storedAppointments = JSON.parse(localStorage.getItem('appointments')) || [];
     setAppointments(storedAppointments);
-    console.log(storedAppointments);
   }, []); // Run this effect only once on component mount
 
   const handleCancel = (appointmentId) => {
