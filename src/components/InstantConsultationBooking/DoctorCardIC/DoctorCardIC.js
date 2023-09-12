@@ -8,29 +8,36 @@ import { v4 as uuidv4 } from 'uuid';
 const DoctorCardIC = ({ doctorId, name, speciality, experience, ratings, profilePic }) => {
   const [showModal, setShowModal] = useState(false);
   const [appointments, setAppointments] = useState([]);
-  const hasAppointmentsForDoctor = appointments.some(appointment => appointment.doctorId === doctorId);
+  const hasAppointmentsForDoctor = appointments.some((appointment) => appointment.doctorId === doctorId);
+
   useEffect(() => {
-    // Retrieve appointments from local storage
-    const storedAppointments = JSON.parse(localStorage.getItem('appointments')) || [];
-    setAppointments(storedAppointments);
-  }, []); // Run this effect only once on component mount
+    // Retrieve appointments for this doctor from local storage
+    const allAppointments = JSON.parse(localStorage.getItem('appointments')) || [];
+    const doctorAppointments = allAppointments.filter((appointment) => appointment.doctorId === doctorId);
+    setAppointments(doctorAppointments);
+  }, [doctorId]); // Run this effect whenever the doctorId changes
 
   const handleCancel = (appointmentId) => {
     const updatedAppointments = appointments.filter((appointment) => appointment.id !== appointmentId);
     setAppointments(updatedAppointments);
-    // Update local storage when canceling an appointment
-    localStorage.setItem('appointments', JSON.stringify(updatedAppointments));
+    // Update local storage with the updated list of appointments for this doctor
+    const allAppointments = JSON.parse(localStorage.getItem('appointments')) || [];
+    const updatedAllAppointments = allAppointments.filter((appointment) => appointment.id !== appointmentId);
+    localStorage.setItem('appointments', JSON.stringify(updatedAllAppointments));
   };
 
   const handleFormSubmit = (appointmentData) => {
     const newAppointment = {
       id: uuidv4(),
       ...appointmentData,
+      doctorId: doctorId, // Include the doctorId in the appointment data
     };
     const updatedAppointments = [...appointments, newAppointment];
     setAppointments(updatedAppointments);
-    // Update local storage when adding a new appointment
-    localStorage.setItem('appointments', JSON.stringify(updatedAppointments));
+    // Update local storage with the updated list of appointments
+    const allAppointments = JSON.parse(localStorage.getItem('appointments')) || [];
+    const updatedAllAppointments = [...allAppointments, newAppointment];
+    localStorage.setItem('appointments', JSON.stringify(updatedAllAppointments));
     setShowModal(false);
   };
 
