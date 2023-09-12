@@ -12,32 +12,80 @@ const DoctorCardIC = ({ doctorId, name, speciality, experience, ratings, profile
 
   useEffect(() => {
     // Retrieve appointments for this doctor from local storage
+    const storedUsername = sessionStorage.getItem('email');
     const allAppointments = JSON.parse(localStorage.getItem('appointments')) || [];
-    const doctorAppointments = allAppointments.filter((appointment) => appointment.doctorId === doctorId);
-    setAppointments(doctorAppointments);
-  }, [doctorId]); // Run this effect whenever the doctorId changes
+
+    // Filter appointments for the logged-in user and the specific doctor
+    const userAppointments = allAppointments.filter(
+      (appointment) => appointment.userId === storedUsername && appointment.doctorId === doctorId
+    );
+
+    setAppointments(userAppointments);
+  }, [doctorId]);
 
   const handleCancel = (appointmentId) => {
     const updatedAppointments = appointments.filter((appointment) => appointment.id !== appointmentId);
     setAppointments(updatedAppointments);
-    // Update local storage with the updated list of appointments for this doctor
+
+    // Update local storage with the updated list of appointments
     const allAppointments = JSON.parse(localStorage.getItem('appointments')) || [];
     const updatedAllAppointments = allAppointments.filter((appointment) => appointment.id !== appointmentId);
     localStorage.setItem('appointments', JSON.stringify(updatedAllAppointments));
   };
 
   const handleFormSubmit = (appointmentData) => {
-    const newAppointment = {
-      id: uuidv4(),
-      ...appointmentData,
-      doctorId: doctorId, // Include the doctorId in the appointment data
-    };
-    const updatedAppointments = [...appointments, newAppointment];
-    setAppointments(updatedAppointments);
-    // Update local storage with the updated list of appointments
-    const allAppointments = JSON.parse(localStorage.getItem('appointments')) || [];
-    const updatedAllAppointments = [...allAppointments, newAppointment];
-    localStorage.setItem('appointments', JSON.stringify(updatedAllAppointments));
+    const storedUsername = sessionStorage.getItem('email');
+
+    // Check if the user has already booked an appointment with this doctor
+    const existingAppointment = appointments.find(
+      (appointment) => appointment.doctorId === doctorId
+    );
+
+    if (existingAppointment) {
+      // If an appointment already exists, update it instead of creating a new one
+      const updatedAppointments = appointments.map((appointment) => {
+        if (appointment.id === existingAppointment.id) {
+          return {
+            ...appointment,
+            ...appointmentData,
+          };
+        }
+        return appointment;
+      });
+
+      setAppointments(updatedAppointments);
+
+      // Update local storage with the updated list of appointments
+      const allAppointments = JSON.parse(localStorage.getItem('appointments')) || [];
+      const updatedAllAppointments = allAppointments.map((appointment) => {
+        if (appointment.id === existingAppointment.id) {
+          return {
+            ...appointment,
+            ...appointmentData,
+          };
+        }
+        return appointment;
+      });
+
+      localStorage.setItem('appointments', JSON.stringify(updatedAllAppointments));
+    } else {
+      // If no existing appointment is found, create a new one
+      const newAppointment = {
+        id: uuidv4(),
+        userId: storedUsername, // Include the user's identifier
+        doctorId: doctorId, // Include the doctor's identifier
+        ...appointmentData,
+      };
+
+      const updatedAppointments = [...appointments, newAppointment];
+      setAppointments(updatedAppointments);
+
+      // Update local storage with the updated list of appointments
+      const allAppointments = JSON.parse(localStorage.getItem('appointments')) || [];
+      const updatedAllAppointments = [...allAppointments, newAppointment];
+      localStorage.setItem('appointments', JSON.stringify(updatedAllAppointments));
+    }
+
     setShowModal(false);
   };
 

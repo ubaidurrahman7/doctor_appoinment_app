@@ -1,10 +1,9 @@
 import React, { useEffect, useState } from 'react';
 import Navbar from '../Navbar/Navbar';
-import './Notification.css'
+import './Notification.css';
 
 const Notification = ({ children }) => {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
-  const [username, setUsername] = useState("");
   const [appointmentData, setAppointmentData] = useState([]);
 
   useEffect(() => {
@@ -12,23 +11,24 @@ const Notification = ({ children }) => {
 
     if (storedUsername) {
       setIsLoggedIn(true);
-      setUsername((prevUsername) => {
-        const username = storedUsername.split('@')[0];
-        return username;
-      });
     }
 
     const storedAppointmentData = JSON.parse(localStorage.getItem('appointments'));
-
     if (storedAppointmentData && Array.isArray(storedAppointmentData) && storedAppointmentData.length > 0) {
-      // Format the date and time with a space for all appointments
-      const formattedAppointments = storedAppointmentData.map((appointment) => {
+      // Filter appointments for the logged-in user
+      const userAppointments = storedAppointmentData.filter(
+        (appointment) => appointment.userId === storedUsername
+      );
+
+      // Format the date and time with a space for all user appointments
+      const formattedAppointments = userAppointments.map((appointment) => {
         const dateTime = new Date(appointment.appointmentDataTime);
         const formattedDate = dateTime.toISOString().split('T')[0]; // Extract the date part
         const formattedTime = dateTime.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
-
         return {
           doctorName: appointment.doctorName,
+          userName: appointment.name,
+          speciality: appointment.doctorSpeciality,
           date: formattedDate,
           time: formattedTime,
         };
@@ -38,7 +38,7 @@ const Notification = ({ children }) => {
     }
   }, []);
 
- return (
+  return (
     <div>
       <Navbar></Navbar>
       {children}
@@ -49,10 +49,13 @@ const Notification = ({ children }) => {
               <h3 className="appointment-card__title">Your Appointments</h3>
               <div className="appointment-card__content">
                 <p className="appointment-card__message">
-                  <strong>User Name:</strong> {username}
+                  <strong>User Name:</strong> {appointment.userName}
                 </p>
                 <p className="appointment-card__message">
                   <strong>Doctor:</strong> {appointment.doctorName}
+                </p>
+                <p className="appointment-card__message">
+                  <strong>Doctor:</strong> {appointment.doctorSpeciality}
                 </p>
                 <p className="appointment-card__message">
                   <strong>Appointment Date:</strong> {appointment.date}
@@ -70,3 +73,4 @@ const Notification = ({ children }) => {
 };
 
 export default Notification;
+
