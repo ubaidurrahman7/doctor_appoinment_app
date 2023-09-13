@@ -1,12 +1,18 @@
-import React from 'react'
+import React, { useEffect, useState } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
 import "./Navbar.css";
+import DropdownMenu from './DropDownMenu';
 const Navbar = () => {
     const navigate = useNavigate();
+    const [username, setUsername] = useState("");
+    
     const authToken = sessionStorage.getItem('auth-token');
-    const userEmail = sessionStorage.getItem('email');
-  const userName = userEmail ? userEmail.split('@')[0] : '';
 
+    const userEmail = sessionStorage.getItem('email');
+
+    useEffect(() => {
+        setUsername(userEmail ? userEmail.split('@')[0] : '');
+      }, [userEmail]);
   const handleLogout = () => {
     for (let i = 0; i < sessionStorage.length; i++) {
         const key = sessionStorage.key(i);
@@ -67,9 +73,14 @@ const Navbar = () => {
 
               
               {authToken ? (<>
-                <span style={{display: 'inline-block'}}>Welcome,{userName}!</span>
-        <button className='btn2' onClick={handleLogout}>Logout</button>
-        </>) : (
+                <>
+            <li className="link">
+              <DropdownMenu userName={username}/> 
+            </li>
+            <li className="link">
+              <button className='btn2' onClick={handleLogout}>Logout</button>
+            </li>
+          </></>) : (
         <>
           <li className="link">
                 <Link to="/sign_up">
