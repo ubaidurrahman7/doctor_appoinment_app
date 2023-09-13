@@ -1,7 +1,7 @@
 /* Reviews.css */
 
 .main{
-    margin-top: 20%;
+    margin-top: 10%;
     display: flex;
     flex-direction: column;
     justify-content: center;
@@ -32,8 +32,8 @@
     height: 26px;
   }
   table td {
+    height: 40px;
     text-align: center;
-    padding: 12px;
     border: none;
     border-bottom: 1px solid #ccc;
   }
@@ -54,4 +54,11 @@
     margin: 5px 0;
     font-size: 12px;
   }
-  
+  .feedback-button-reviewed{
+    height: 32px;
+    width: 100px;
+    border-radius: 5px;
+    background-color: rgb(207, 207, 207);
+    padding-top: 5px;
+    margin-left: 40px;
+  }

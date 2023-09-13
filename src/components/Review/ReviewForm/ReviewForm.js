@@ -5,7 +5,7 @@ import "./ReviewForm.css"
 
 const ReviewForm = ({ doctor }) => {
   const [rating, setRating] = useState(0); // Initialize with 0 rating
-  const [review, setReview] = useState('');
+  const [reviewMsg, setReviewMsg] = useState('');
   const [submitted, setSubmitted] = useState(false);
 
   const handleRatingChange = (e) => {
@@ -13,20 +13,20 @@ const ReviewForm = ({ doctor }) => {
   };
 
   const handleReviewChange = (e) => {
-    setReview(e.target.value);
+    setReviewMsg(e.target.value);
   };
 
   const handleSubmit = () => {
     // Create a new review object
     const newReview = {
-      doctorId: doctor.id,
-      doctorName: doctor.name,
-      userName: sessionStorage.getItem('email'), // Add the username
+      doctorId: doctor.doctorId,
+      doctorName: doctor.doctorName,
+      userName: sessionStorage.getItem('email'), 
       rating,
-      review,
+      reviewMsg,
     };
 
-    // Save the review to local storage (you can replace this logic with your preferred storage)
+    // Save the review to local storage 
     const storedReviews = JSON.parse(localStorage.getItem('reviews')) || [];
     const existingReview = storedReviews.find(
       (review) =>
@@ -87,7 +87,7 @@ const ReviewForm = ({ doctor }) => {
                     <textarea
                       id='review'
                       onChange={handleReviewChange}
-                      value={review}
+                      value={reviewMsg}
                       rows='3'
                       cols='50'
                     />
