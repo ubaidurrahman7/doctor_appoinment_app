@@ -2,7 +2,23 @@
     margin: 0%;
     padding: 0%;
 }
-.review-form-button {
+.modal{
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    width: 350px;
+}
+.modal .header{
+    font-weight: bold;
+    text-align: center;
+}
+.close{
+    align-items: flex-end;
+    width: 10px;
+    height: 10px;
+}
+/* .review-form-button {
     background-color: rgb(73, 73, 229);
     color: white;
     text-align: center;
@@ -11,4 +27,4 @@
     font-size: 12px;
     cursor: pointer;
     margin: 0;
-  }
+  } */
