@@ -1,0 +1,14 @@
+.ReviewForm{
+    margin: 0%;
+    padding: 0%;
+}
+.review-form-button {
+    background-color: rgb(73, 73, 229);
+    color: white;
+    text-align: center;
+    width: 32px;
+    border-radius: 8px;
+    font-size: 12px;
+    cursor: pointer;
+    margin: 0;
+  }
