@@ -1,24 +1,30 @@
-import React, { useEffect, useState } from 'react'
-import { Link, useNavigate } from 'react-router-dom'
+import React, { useEffect, useState } from 'react';
+import { Link, useNavigate } from 'react-router-dom';
 import "./Navbar.css";
-import DropdownMenu from './DropDownMenu';
+
 const Navbar = () => {
-    const navigate = useNavigate();
-    const [username, setUsername] = useState("");
-    
-    const authToken = sessionStorage.getItem('auth-token');
+  const navigate = useNavigate();
+  const [username, setUsername] = useState("");
+  const [isOpen, setIsOpen] = useState(false);
+  
+  const authToken = sessionStorage.getItem('auth-token');
+  const userEmail = sessionStorage.getItem('email');
 
-    const userEmail = sessionStorage.getItem('email');
+  useEffect(() => {
+    const userName = userEmail ? userEmail.split('@')[0] : '';
+    setUsername(userName);
+  }, [userEmail]);
 
-    useEffect(() => {
-        setUsername(userEmail ? userEmail.split('@')[0] : '');
-      }, [userEmail]);
   const handleLogout = () => {
     for (let i = 0; i < sessionStorage.length; i++) {
-        const key = sessionStorage.key(i);
-        sessionStorage.removeItem(key);
+      const key = sessionStorage.key(i);
+      sessionStorage.removeItem(key);
     }
     navigate('/');
+  };
+
+  const toggleDropdown = () => {
+    setIsOpen(!isOpen);
   };
   return (
     <nav>
@@ -72,15 +78,23 @@ const Navbar = () => {
 
 
               
-              {authToken ? (<>
-                <>
+              {authToken ? (
+          <>
             <li className="link">
-              <DropdownMenu userName={username}/> 
-            </li>
+        <span className="dropdown-trigger" onClick={toggleDropdown}>
+          Welcome, {username}!
+          <i className={`fa fa-chevron-${isOpen ? 'up' : 'down'}`} />
+          <div className="dropdown-content">
+            <Link to="/profile">Your Profile</Link>
+            <Link to="/reports">Reports</Link>
+          </div>
+        </span>
+      </li>
             <li className="link">
               <button className='btn2' onClick={handleLogout}>Logout</button>
             </li>
-          </></>) : (
+          </>
+        ) : (
         <>
           <li className="link">
                 <Link to="/sign_up">
