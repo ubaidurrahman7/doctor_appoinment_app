@@ -1,0 +1,74 @@
+/* Reviews.css */
+
+.main{
+    margin-top: 10%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    width: 90%;
+    margin-left: 10%;
+  }
+  
+  .table-heading {
+    padding: 10px;
+    font-weight: bold;
+    text-align: left
+  }
+  
+  .table-content {
+    width: 85%;
+    margin-top: 20px;
+    padding: 12px 0px;
+  }
+  .table-content .heading-row{
+    margin: 12px 0px;
+  }
+  
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    border: none;
+    border-spacing: 0;
+  }
+  
+  table th{
+    background-color: rgb(225, 223, 223);
+    height: 26px;
+  }
+  table td {
+    height: 40px;
+    text-align: center;
+    border: none;
+    border-bottom: 1px solid #ccc;
+  }
+  
+  table th {
+    background-color: #f2f2f2;
+    color: black;
+  }
+  
+  table tr:nth-child(even) {
+    background-color: #f2f2f2;
+  }
+  .review-given {
+    margin-top: 10px;
+  }
+  
+  .review-given p {
+    margin: 5px 0;
+    font-size: 12px;
+  }
+  .report-btn{
+    color: white;
+    background-color: rgb(79, 79, 247);
+    padding: 6px 0px !important ;
+    margin: 5px 0px;
+    margin-left: 10px;
+    border-radius: 5px;
+  }
+  .report-btn .link{
+    text-decoration: none;
+    color: white;
+  }
+  
+  
